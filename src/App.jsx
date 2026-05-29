@@ -61,6 +61,7 @@ const styles = `
     z-index: 0;
   }
 
+  /* ── Top bar ── */
   .top-bar {
     position: absolute;
     top: 0;
@@ -113,6 +114,7 @@ const styles = `
     color: var(--text-muted);
   }
 
+  /* ── Rule ── */
   .rule {
     position: absolute;
     top: 96px;
@@ -129,6 +131,7 @@ const styles = `
     opacity: 0.18;
   }
 
+  /* ── Center ── */
   .center {
     position: relative;
     z-index: 10;
@@ -140,7 +143,7 @@ const styles = `
 
   .headline {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(72px, 10vw, 128px);
+    font-size: clamp(52px, 12vw, 128px);
     font-weight: 300;
     line-height: 1.0;
     letter-spacing: -0.01em;
@@ -184,6 +187,7 @@ const styles = `
     margin: 0 10px;
   }
 
+  /* ── Bottom bar ── */
   .bottom-bar {
     position: absolute;
     bottom: 36px;
@@ -215,6 +219,7 @@ const styles = `
     text-transform: uppercase;
   }
 
+  /* ── Corner accents ── */
   .corner {
     position: absolute;
     width: 18px;
@@ -229,6 +234,57 @@ const styles = `
   .corner-tr { top: 24px; right: 24px; border-top: 1.5px solid var(--navy); border-right: 1.5px solid var(--navy); }
   .corner-bl { bottom: 24px; left: 24px; border-bottom: 1.5px solid var(--navy); border-left: 1.5px solid var(--navy); }
   .corner-br { bottom: 24px; right: 24px; border-bottom: 1.5px solid var(--navy); border-right: 1.5px solid var(--navy); }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .top-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 28px 28px 0;
+    }
+
+    .logo {
+      font-size: 16px;
+    }
+
+    .logo-sub {
+      font-size: 8px;
+      margin-top: 4px;
+    }
+
+    .top-right {
+      font-size: 8.5px;
+      letter-spacing: 0.18em;
+    }
+
+    .rule {
+      top: 108px;
+      left: 28px;
+      right: 28px;
+    }
+
+    .divider {
+      margin-top: 32px;
+    }
+
+    .bottom-bar {
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+    }
+
+    .bottom-left,
+    .bottom-right {
+      font-size: 8px;
+      letter-spacing: 0.12em;
+    }
+
+    .corner-tl { top: 16px; left: 16px; }
+    .corner-tr { top: 16px; right: 16px; }
+    .corner-bl { bottom: 16px; left: 16px; }
+    .corner-br { bottom: 16px; right: 16px; }
+  }
 `;
 
 export default function App() {
@@ -242,10 +298,15 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (headlineRef.current) {
-      const w = headlineRef.current.getBoundingClientRect().width;
-      setLineWidth(w);
-    }
+    const measure = () => {
+      if (headlineRef.current) {
+        const w = headlineRef.current.getBoundingClientRect().width;
+        setLineWidth(w);
+      }
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
   }, [visible]);
 
   const v = visible ? 'visible' : '';
